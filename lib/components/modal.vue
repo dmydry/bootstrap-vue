@@ -35,7 +35,7 @@
                         <div class="modal-footer" v-if="!hideFooter">
                             <slot name="modal-footer">
                                 <b-btn variant="secondary" @click="hide(false)">{{closeTitle}}</b-btn>
-                                <b-btn :disabled="disableSuccess" variant="primary" @click="hide(true)">{{okTitle}}</b-btn>
+                                <b-btn :disabled="disableSuccess" variant="primary" @click="!disableSuccess && hide(true)">{{okTitle}}</b-btn>
                             </slot>
                         </div>
 
