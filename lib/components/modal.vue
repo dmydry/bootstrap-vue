@@ -22,7 +22,7 @@
                                 <h5 class="modal-title">
                                     <slot name="modal-title">{{title}}</slot>
                                 </h5>
-                                <button type="button" class="close" aria-label="Close" @click="hide">
+                                <button type="button" class="close" aria-label="Close" @click="hide(false)">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </slot>
@@ -35,7 +35,7 @@
                         <div class="modal-footer" v-if="!hideFooter">
                             <slot name="modal-footer">
                                 <b-btn variant="secondary" @click="hide(false)">{{closeTitle}}</b-btn>
-                                <b-btn variant="primary" @click="hide(true)">{{okTitle}}</b-btn>
+                                <b-btn :disabled="disableSuccess" variant="primary" @click="hide(true)">{{okTitle}}</b-btn>
                             </slot>
                         </div>
 
@@ -109,7 +109,11 @@
             hideFooter: {
                 type: Boolean,
                 default: false
-            }
+            },
+            disableSuccess: {
+              type: Boolean,
+              default: false
+            },
         },
         methods: {
             show() {
