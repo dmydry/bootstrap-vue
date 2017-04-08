@@ -102,6 +102,10 @@
                 type: Boolean,
                 default: true
             },
+            closeOnEsc: {
+                type: Boolean,
+                default: true
+            },
             hideHeader: {
                 type: Boolean,
                 default: false
@@ -155,7 +159,7 @@
 
                 // Support for esc key press
                 const key = e.which || e.keyCode;
-                if (key === 27) { // 27 is esc
+                if (this.closeOnEsc && key === 27) { // 27 is esc
                     this.hide();
                 }
             },
