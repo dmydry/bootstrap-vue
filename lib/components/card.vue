@@ -1,5 +1,5 @@
 <template>
-    <div :class="['card',cardVariant,cardAlign,cardInverse]">
+    <component :is="tag" :class="['card',cardVariant,cardAlign,cardInverse]">
         <!-- Card Image Slot-->
         <slot name="img" ref="img">
             <img v-if="img" :src="img" :alt="imgAlt" class="card-img">
@@ -30,7 +30,7 @@
                 <div v-html="footer"></div>
             </slot>
         </component>
-    </div>
+    </component>
 </template>
 
 <script>
@@ -56,13 +56,13 @@
                 }
             },
             cardAlign() {
-                return `text-${this.align}`;
+                return this.align ? `text-${this.align}` : null;
             }
         },
         props: {
             align: {
                 type: String,
-                default: 'left'
+                default: null
             },
             inverse: {
                 type: Boolean,
@@ -72,6 +72,10 @@
             variant: {
                 type: String,
                 default: null
+            },
+            tag: {
+                type: String,
+                default: 'div'
             },
 
             // Header

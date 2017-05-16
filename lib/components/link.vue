@@ -1,36 +1,39 @@
 <template>
-    <a :is="componentType" :active-class="activeClass" :to="toObject" :href="hrefString">
+    <!-- When VueRouter is available -->
+    <a v-if="isRouterLink"
+       is="router-link"
+       :active-class="activeClass"
+       :exact-active-class="exactActiveClass"
+       :disabled="disabled"
+       :aria-disabled="disabled ? 'true' : 'false'"
+       :to="to"
+       :exact="exact"
+       :append="append"
+       :replace="replace"
+       :event="event"
+       :tag="tag"
+       :class="linkClassObject"
+       @click="linkClick"
+    >
+        <slot></slot>
+    </a>
+
+    <!-- Fallback mode -->
+    <a v-else
+       :disabled="disabled"
+       :aria-disabled="disabled ? 'true' : 'false'"
+       :href="_href"
+       :class="linkClassObject"
+       @click="linkClick"
+    >
         <slot></slot>
     </a>
 </template>
 
 <script>
+    import linkMixin from '../mixins/link';
+
     export default {
-        computed: {
-            componentType() {
-                return this.$router ? 'router-link' : 'a';
-            },
-            hrefString() {
-                if (this.to) {
-                    return this.to.path || this.to;
-                }
-                return this.href;
-            },
-            toObject() {
-                return this.to || this.href;
-            }
-        },
-        props: {
-            activeClass: {
-                type: String,
-                default: 'active'
-            },
-            to: {
-                type: [String, Object]
-            },
-            href: {
-                type: String
-            }
-        }
+        mixins: [linkMixin]
     };
 </script>

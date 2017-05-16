@@ -8,5 +8,6 @@ banner.png
 .npmignore
 .babelrc
 docs-dist
-nuxt.config.js
 examples
+RELEASE_NOTES_TEMPLATE.ejs
+CONTRIBUTING.md
