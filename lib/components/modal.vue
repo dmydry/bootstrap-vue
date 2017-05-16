@@ -171,7 +171,6 @@
             },
             returnFocus: {
                 default: null
-            }
             },
             disableSuccess: {
               type: Boolean,
