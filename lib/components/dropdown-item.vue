@@ -1,13 +1,28 @@
 <template>
-    <a :is="componentType" class="dropdown-item" :to="toObject" :href="hrefString">
+    <b-link class="dropdown-item"
+            :active="active"
+            :disabled="disabled"
+            :href="href"
+            :to="to"
+            :tag="tag"
+            :exact="exact"
+            :append="append"
+            :replace="replace"
+            :active-class="activeClass"
+            :exact-active-class="exactActiveClass"
+            :event="event"
+            @click="$emit('click')"
+    >
         <slot></slot>
-    </a>
+    </b-link>
 </template>
 
 <script>
-    import Link from './link.vue';
+    import linkMixin from '../mixins/link';
+    import bLink from './link.vue';
 
     export default {
-        extends: Link
+        components: {bLink},
+        mixins: [linkMixin]
     };
 </script>

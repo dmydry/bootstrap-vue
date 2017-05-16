@@ -1,23 +1,47 @@
 <template>
-    <li :class="{'nav-item': true, show: show,dropdown: !dropup, dropup: dropup}">
-        <a @click.stop.prevent="toggle($event)"
-           :class="['nav-link', dropdownToggle]"
-           href="" aria-haspopup="true"
-           :aria-expanded="show"
-           :disabled="disabled">
-            <slot name="text">{{ text }}</slot>
+    <li :class="['nav-item','dropdown', {dropup, show: visible}]">
+
+        <a :class="['nav-link', dropdownToggle, {disabled}]"
+           href="#"
+           ref="button"
+           :id="id ? (id + '__BV_button_') : null"
+           aria-haspopup="true"
+           :aria-expanded="visible ? 'true' : 'false'"
+           :disabled="disabled"
+           @click.stop.prevent="toggle($event)"
+           @keydown.enter.stop.prevent="toggle($event)"
+           @keydown.space.stop.prevent="toggle($event)"
+        >
+            <slot name="text"><span v-html="text"></span></slot>
         </a>
-        <div :class="{'dropdown-menu': true, 'dropdown-menu-right': rightAlignment}">
+
+        <div :class="['dropdown-menu',{'dropdown-menu-right': right}]"
+             role="menu"
+             ref="menu"
+             :aria-labelledby="id ? (id + '__BV_button_') : null"
+             @keyup.esc="onEsc"
+             @keydown.tab="onTab"
+             @keydown.up="focusNext($event,true)"
+             @keydown.down="focusNext($event,false)"
+        >
             <slot></slot>
         </div>
+
     </li>
 </template>
 
 <script>
+    import clickOut from '../mixins/clickout';
+    import dropdown from '../mixins/dropdown';
+
     export default {
+        mixins: [
+            clickOut,
+            dropdown
+        ],
         data() {
             return {
-                show: false
+                visible: false
             };
         },
         computed: {
@@ -26,63 +50,17 @@
             }
         },
         props: {
+            id: {
+                type: String
+            },
             caret: {
                 type: Boolean,
                 default: true
-            },
-            text: {
-                type: String,
-                default: ''
-            },
-            dropup: {
-                type: Boolean,
-                default: false
-            },
-            rightAlignment: {
-                type: Boolean,
-                default: false
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            },
-            class: ['class']
-        },
-        created() {
-            this.$root.$on('shown::dropdown', el => {
-                if (el !== this) {
-                    this.clickOut();
-                }
-            });
-        },
-        mounted() {
-            if (typeof document !== 'undefined') {
-                document.documentElement.addEventListener('click', this.clickOut);
-            }
-        },
-        destroyed() {
-            if (typeof document !== 'undefined') {
-                document.removeEventListener('click', this.clickOut);
             }
         },
         methods: {
-            setShow(state) {
-                if (this.show === state) {
-                    return; // Avoid duplicated emits
-                }
-                this.show = state;
-
-                if (this.show) {
-                    this.$root.$emit('shown::dropdown', this);
-                } else {
-                    this.$root.$emit('hidden::dropdown', this);
-                }
-            },
-            toggle() {
-                this.setShow(!this.show);
-            },
-            clickOut() {
-                this.setShow(false);
+            clickOutListener() {
+                this.visible = false;
             }
         }
     };
